@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkynetzMVC", "SkynetzMVC\SkynetzMVC.csproj", "{C9C22D65-AE18-44E4-A256-1DB4F13AE880}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkynetzMVC.Test", "SkynetzMVC.Test\SkynetzMVC.Test.csproj", "{05401AC9-7F05-40CF-945A-78FA4780B502}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9C22D65-AE18-44E4-A256-1DB4F13AE880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9C22D65-AE18-44E4-A256-1DB4F13AE880}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9C22D65-AE18-44E4-A256-1DB4F13AE880}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9C22D65-AE18-44E4-A256-1DB4F13AE880}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05401AC9-7F05-40CF-945A-78FA4780B502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05401AC9-7F05-40CF-945A-78FA4780B502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05401AC9-7F05-40CF-945A-78FA4780B502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05401AC9-7F05-40CF-945A-78FA4780B502}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84C6CDEB-663A-416B-9739-61B58C4431E9}
+	EndGlobalSection
+EndGlobal
