@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using Microsoft.VisualBasic;
+using SkynetzMVC.Controllers.DTO;
 using SkynetzMVC.Models;
 using SkynetzMVC.Repositories;
 using SkynetzMVC.Services;
@@ -216,34 +217,28 @@ namespace SkynetzMVC.Test
 
         [Theory]
         [InlineData("011", "016", 31, "FaleMais 30")]
-        public void TestResult(string origem, string destino, int minutosUsados, string planoUsado)
+        public void TestResult(string source, string destination, int usedMinutes, string usedPlan)
         {
             HomeService homeService = new HomeService();
 
-            var Result = homeService.Result(origem, destino, minutosUsados, planoUsado);
+            var Result = homeService.Result(source, destination, usedMinutes, usedPlan);
 
-            string expectedResult = "Origem: 011 - Destino: 016 - Tempo: 31 - Plano: FaleMais 30 - Com FaleMais: 2,09 - Sem FaleMais: 58,90";
+            ResultDTO compareDTO = new ResultDTO()
+            {
+                Source = "011",
+                Destination = "016",
+                UsedMinutes = 31,
+                UsedPlan = "FaleMais 30",
+                PriceWithPlan = "2,09",
+                PriceWithoutPlan = "58,90"
+            };
 
-            Assert.Equal(expectedResult, Result);
-        }
-
-        [Theory]
-        [InlineData("011", null, 30, "FaleMais 30")]
-        public void TestResultDinamic(string? origem, string? destino, int minutosUsados, string planoUsado)
-        {
-            HomeService homeService = new HomeService();
-
-            FilterTariff filtroTarifa = new FilterTariff() { Source = origem, Destination = destino };
-
-            FilterPlan filtroPlano = new FilterPlan() { Name = planoUsado };
-
-            var Results = homeService.ResultsDinamic(filtroPlano, filtroTarifa, minutosUsados);
-
-            string expectedResult = "Origem: 011 - Destino: 016 - Tempo: 30 - Plano: FaleMais 30 - Com FaleMais: 0,00 - Sem FaleMais: 57,00" + Environment.NewLine;
-            expectedResult += "Origem: 011 - Destino: 017 - Tempo: 30 - Plano: FaleMais 30 - Com FaleMais: 0,00 - Sem FaleMais: 51,00" + Environment.NewLine;
-            expectedResult += "Origem: 011 - Destino: 018 - Tempo: 30 - Plano: FaleMais 30 - Com FaleMais: 0,00 - Sem FaleMais: 27,00" + Environment.NewLine;
-
-            Assert.Equal(expectedResult, Results);
+            Assert.Equal(compareDTO.Source, Result.Source);
+            Assert.Equal(compareDTO.Destination, Result.Destination);
+            Assert.Equal(compareDTO.UsedMinutes, Result.UsedMinutes);
+            Assert.Equal(compareDTO.UsedPlan, Result.UsedPlan);
+            Assert.Equal(compareDTO.PriceWithPlan, Result.PriceWithPlan);
+            Assert.Equal(compareDTO.PriceWithoutPlan, Result.PriceWithoutPlan);
         }
 
     }

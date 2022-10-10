@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkynetzMVC.Controllers.DTO;
 using SkynetzMVC.Models;
 using SkynetzMVC.Repositories;
+using SkynetzMVC.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,6 +49,52 @@ namespace SkynetzMVC.Test
             List<Plan> plans = planRepository.GetByParameters(filterPlan);
 
             CollectionAssert.Equals(expectedPlans, plans);
+        }
+
+        [Theory]
+        [InlineData("011", null, 30, "FaleMais 30")]
+        public void TestResultDinamic(string? source, string? destination, int usedMinutes, string usedPlan)
+        {
+            HomeService homeService = new HomeService();
+
+            FilterTariff filterTariff = new FilterTariff() { Source = source, Destination = destination };
+
+            FilterPlan filterPlan = new FilterPlan() { Name = usedPlan };
+
+            var Results = homeService.ResultsDinamic(filterPlan, filterTariff, usedMinutes);
+
+            List<ResultDTO> expectedDTOs = new List<ResultDTO>()
+            {
+                new ResultDTO()
+                {
+                    Source = "011",
+                    Destination = "016",
+                    UsedMinutes = 30,
+                    UsedPlan = "FaleMais 30",
+                    PriceWithPlan = "0,00",
+                    PriceWithoutPlan = "57,00"
+                },
+                new ResultDTO()
+                {
+                    Source = "011",
+                    Destination = "017",
+                    UsedMinutes = 30,
+                    UsedPlan = "FaleMais 30",
+                    PriceWithPlan = "0,00",
+                    PriceWithoutPlan = "51,00"
+                },
+                new ResultDTO()
+                {
+                    Source = "011",
+                    Destination = "018",
+                    UsedMinutes = 30,
+                    UsedPlan = "FaleMais 30",
+                    PriceWithPlan = "0,00",
+                    PriceWithoutPlan = "27,00"
+                }
+            };
+
+            CollectionAssert.Equals(expectedDTOs, Results);
         }
     }
 }

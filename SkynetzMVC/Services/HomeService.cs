@@ -1,4 +1,5 @@
-﻿using SkynetzMVC.Models;
+﻿using SkynetzMVC.Controllers.DTO;
+using SkynetzMVC.Models;
 using SkynetzMVC.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace SkynetzMVC.Services
             planRepository = new PlanRepository();
         }
 
-        public string Result(string source, string destination, int usedMinutes, string usedPlan)
+        public ResultDTO Result(string source, string destination, int usedMinutes, string usedPlan)
         {
             FilterPlan filterPlan = new FilterPlan() { Name = usedPlan };
             FilterTariff filterTariff = new FilterTariff() { Source = source, Destination = destination };
@@ -27,7 +28,6 @@ namespace SkynetzMVC.Services
 
             double priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
             double priceWithPlan;
-            string Results = string.Empty;
 
             if (plan.FreeMinutes >= usedMinutes)
             {
@@ -38,42 +38,58 @@ namespace SkynetzMVC.Services
                 priceWithPlan = (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10);
             }
 
-            Results += "Origem: " + tariff.Source + " - Destino: " + tariff.Destination + " - Tempo: " + usedMinutes;
-            Results += " - Plano: " + plan.Name + " - Com FaleMais: " + priceWithPlan.ToString("N2") + " - Sem FaleMais: " + priceWhitoutPlan.ToString("N2");
+            ResultDTO resultDTO = new ResultDTO 
+            {   
+                Source = tariff.Source, 
+                Destination = tariff.Destination, 
+                UsedMinutes = usedMinutes, 
+                UsedPlan = plan.Name, 
+                PriceWithPlan = priceWithPlan.ToString("N2"), 
+                PriceWithoutPlan = priceWhitoutPlan.ToString("N2")
+            };
 
-            return Results;
+            return resultDTO;
         }
 
-        public string ResultsDinamic(FilterPlan filterPlan, FilterTariff filterTariff, int usedMinutes)
+        public List<ResultDTO> ResultsDinamic(FilterPlan filterPlan, FilterTariff filterTariff, int usedMinutes)
         {
             List<Tariff> tariffs = tariffRepository.GetByParameters(filterTariff);
             List<Plan> plans = planRepository.GetByParameters(filterPlan);
 
-            double priceWhitoutPlan;
-            double priceWhitPlan;
-            string Results = string.Empty;
+            double priceWithoutPlan;
+            double priceWithPlan;
+            List<ResultDTO> resultDTOs = new List<ResultDTO>();
 
             foreach (Tariff tariff in tariffs)
             {
                 foreach (Plan plan in plans)
                 {
-                    priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
+                    priceWithoutPlan = tariff.MinuteValue * usedMinutes;
 
                     if (plan.FreeMinutes >= usedMinutes)
                     {
-                        priceWhitPlan = 0;
+                        priceWithPlan = 0;
                     }
                     else
                     {
-                        priceWhitPlan = (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10);
+                        priceWithPlan = (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10);
                     }
 
-                    Results += "Origem: " + tariff.Source + " - Destino: " + tariff.Destination + " - Tempo: " + usedMinutes;
-                    Results += " - Plano: " + plan.Name + " - Com FaleMais: " + priceWhitPlan.ToString("N2") + " - Sem FaleMais: " + priceWhitoutPlan.ToString("N2") + Environment.NewLine;
+                    ResultDTO resultDTO = new ResultDTO
+                    {
+                        Source = tariff.Source,
+                        Destination = tariff.Destination,
+                        UsedMinutes = usedMinutes,
+                        UsedPlan = plan.Name,
+                        PriceWithPlan = priceWithPlan.ToString("N2"),
+                        PriceWithoutPlan = priceWithoutPlan.ToString("N2")
+                    };
+
+                    resultDTOs.Add(resultDTO);
                 }
             }
 
-            return Results;
+            return resultDTOs;
         }
 
         // Métodos Antigos
