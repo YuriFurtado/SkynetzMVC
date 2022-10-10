@@ -8,68 +8,68 @@ namespace SkynetzMVC.Services
 {
     public class HomeService
     {
-        public readonly TariffRepository tarifaRepository;
-        public readonly PlanRepository planoRepository;
+        public readonly TariffRepository tariffRepository;
+        public readonly PlanRepository planRepository;
 
         public HomeService()
         {
-            tarifaRepository = new TariffRepository();
-            planoRepository = new PlanRepository();
+            tariffRepository = new TariffRepository();
+            planRepository = new PlanRepository();
         }
 
-        public string Result(string origem, string destino, int minutosUsados, string planoUsado)
+        public string Result(string source, string destination, int usedMinutes, string usedPlan)
         {
-            FilterPlan filtroPlano = new FilterPlan() { Name = planoUsado};
-            FilterTariff filtroTarifa = new FilterTariff() { Source = origem, Destination = destino };
+            FilterPlan filterPlan = new FilterPlan() { Name = usedPlan };
+            FilterTariff filterTariff = new FilterTariff() { Source = source, Destination = destination };
 
-            Tariff tarifa = tarifaRepository.GetByParameters(filtroTarifa).FirstOrDefault();
-            Plan plano = planoRepository.GetByParameters(filtroPlano).FirstOrDefault();
+            Tariff tariff = tariffRepository.GetByParameters(filterTariff).FirstOrDefault();
+            Plan plan = planRepository.GetByParameters(filterPlan).FirstOrDefault();
 
-            double precoSemPlano = tarifa.MinuteValue * minutosUsados;
-            double precoComPlano;
+            double priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
+            double priceWithPlan;
             string Results = string.Empty;
 
-            if (plano.FreeMinutes >= minutosUsados)
+            if (plan.FreeMinutes >= usedMinutes)
             {
-                precoComPlano = 0;
+                priceWithPlan = 0;
             }
             else
             {
-                precoComPlano = (minutosUsados - plano.FreeMinutes) * (tarifa.MinuteValue * 1.10);
+                priceWithPlan = (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10);
             }
 
-            Results += "Origem: " + tarifa.Source + " - Destino: " + tarifa.Destination + " - Tempo: " + minutosUsados;
-            Results += " - Plano: " + plano.Name + " - Com FaleMais: " + precoComPlano.ToString("N2") + " - Sem FaleMais: " + precoSemPlano.ToString("N2");
+            Results += "Origem: " + tariff.Source + " - Destino: " + tariff.Destination + " - Tempo: " + usedMinutes;
+            Results += " - Plano: " + plan.Name + " - Com FaleMais: " + priceWithPlan.ToString("N2") + " - Sem FaleMais: " + priceWhitoutPlan.ToString("N2");
 
             return Results;
         }
 
-        public string ResultsDinamic(FilterPlan filtroPlano, FilterTariff filtroTarifa, int minutosUsados)
+        public string ResultsDinamic(FilterPlan filterPlan, FilterTariff filterTariff, int usedMinutes)
         {
-            List<Tariff> tarifas = tarifaRepository.GetByParameters(filtroTarifa);
-            List<Plan> planos = planoRepository.GetByParameters(filtroPlano);
+            List<Tariff> tariffs = tariffRepository.GetByParameters(filterTariff);
+            List<Plan> plans = planRepository.GetByParameters(filterPlan);
 
-            double precoSemPlano;
-            double precoComPlano;
+            double priceWhitoutPlan;
+            double priceWhitPlan;
             string Results = string.Empty;
 
-            foreach (Tariff tarifa in tarifas)
+            foreach (Tariff tariff in tariffs)
             {
-                foreach (Plan plano in planos)
+                foreach (Plan plan in plans)
                 {
-                    precoSemPlano = tarifa.MinuteValue * minutosUsados;
+                    priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
 
-                    if (plano.FreeMinutes >= minutosUsados)
+                    if (plan.FreeMinutes >= usedMinutes)
                     {
-                        precoComPlano = 0;
+                        priceWhitPlan = 0;
                     }
                     else
                     {
-                        precoComPlano = (minutosUsados - plano.FreeMinutes) * (tarifa.MinuteValue * 1.10);
+                        priceWhitPlan = (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10);
                     }
 
-                    Results += "Origem: " + tarifa.Source + " - Destino: " + tarifa.Destination + " - Tempo: " + minutosUsados;
-                    Results += " - Plano: " + plano.Name + " - Com FaleMais: " + precoComPlano.ToString("N2") + " - Sem FaleMais: " + precoSemPlano.ToString("N2") + Environment.NewLine;
+                    Results += "Origem: " + tariff.Source + " - Destino: " + tariff.Destination + " - Tempo: " + usedMinutes;
+                    Results += " - Plano: " + plan.Name + " - Com FaleMais: " + priceWhitPlan.ToString("N2") + " - Sem FaleMais: " + priceWhitoutPlan.ToString("N2") + Environment.NewLine;
                 }
             }
 
