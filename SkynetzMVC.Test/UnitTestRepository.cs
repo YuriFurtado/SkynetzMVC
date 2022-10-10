@@ -8,7 +8,6 @@ using SkynetzMVC.Models;
 using SkynetzMVC.Repositories;
 using SkynetzMVC.Services;
 using Xunit;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SkynetzMVC.Test
 {
@@ -16,200 +15,200 @@ namespace SkynetzMVC.Test
     {
         [Theory]
         [InlineData(1, "012", "011", 2.00)]
-        public void TestUpdateTarifa(int id, string origem, string destino, double valorMinuto)
+        public void TestUpdateTariff(int id, string source, string destination, double minuteValue)
         {
-            TarifaRepository tarifaRepository = new TarifaRepository();
+            TariffRepository tariffRepository = new TariffRepository();
 
-            var novaTarifa = new Tarifa() { Id = id , Origem = origem, Destino = destino, ValorMinuto = valorMinuto}; 
+            var newTariff = new Tariff() { Id = id , Source = source, Destination = destination, MinuteValue = minuteValue }; 
 
-            Tarifa Retorno = tarifaRepository.UpdateTarifa(novaTarifa);
+            Tariff Retorno = tariffRepository.UpdateTarifa(newTariff);
 
-            Assert.Equal(novaTarifa.Id, Retorno.Id);
-            Assert.Equal(novaTarifa.Origem, Retorno.Origem);
-            Assert.Equal(novaTarifa.Destino, Retorno.Destino);
-            Assert.Equal(novaTarifa.ValorMinuto, Retorno.ValorMinuto);
+            Assert.Equal(newTariff.Id, Retorno.Id);
+            Assert.Equal(newTariff.Source, Retorno.Source);
+            Assert.Equal(newTariff.Destination, Retorno.Destination);
+            Assert.Equal(newTariff.MinuteValue, Retorno.MinuteValue);
         }
 
         [Theory]
         [InlineData(2)]
-        public void TestSelectTarifa(int id)
+        public void TestSelectTariff(int id)
         {
-            TarifaRepository tarifaRepository = new TarifaRepository();
+            TariffRepository tariffRepository = new TariffRepository();
 
-            var tarifaComparada = new Tarifa() { Id = 2, Origem = "016", Destino = "011", ValorMinuto = 2.90 };
+            var comparedTariff = new Tariff() { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.90 };
 
-            Tarifa Retorno = tarifaRepository.GetTarifaById(id);
+            Tariff Return = tariffRepository.GetTariffById(id);
 
-            Assert.Equal(tarifaComparada.Id, Retorno.Id);
-            Assert.Equal(tarifaComparada.Origem, Retorno.Origem);
-            Assert.Equal(tarifaComparada.Destino, Retorno.Destino);
-            Assert.Equal(tarifaComparada.ValorMinuto, Retorno.ValorMinuto);
+            Assert.Equal(comparedTariff.Id, Return.Id);
+            Assert.Equal(comparedTariff.Source, Return.Source);
+            Assert.Equal(comparedTariff.Destination, Return.Destination);
+            Assert.Equal(comparedTariff.MinuteValue, Return.MinuteValue);
         }
 
         [Theory]
         [InlineData(7, "013", "022", 1.50)]
-        public void TestInsertTarifa(int id, string origem, string destino, double valorMinuto)
+        public void TestInsertTariff(int id, string source, string destination, double minuteValue)
         {
-            TarifaRepository tarifaRepository = new TarifaRepository();
+            TariffRepository tariffRepository = new TariffRepository();
             
-            var tarifaInserida = new Tarifa() { Id = id, Origem = origem, Destino = destino, ValorMinuto = valorMinuto };
+            var insertTariff = new Tariff() { Id = id, Source = source, Destination = destination, MinuteValue = minuteValue };
 
-            Tarifa Retorno = tarifaRepository.InsertTarifa(tarifaInserida);
+            Tariff Return = tariffRepository.InsertTariff(insertTariff);
 
-            Assert.Equal(tarifaInserida.Id, Retorno.Id);
-            Assert.Equal(tarifaInserida.Origem, Retorno.Origem);
-            Assert.Equal(tarifaInserida.Destino, Retorno.Destino);
-            Assert.Equal(tarifaInserida.ValorMinuto, Retorno.ValorMinuto);
+            Assert.Equal(insertTariff.Id, Return.Id);
+            Assert.Equal(insertTariff.Source, Return.Source);
+            Assert.Equal(insertTariff.Destination, Return.Destination);
+            Assert.Equal(insertTariff.MinuteValue, Return.MinuteValue);
         }
 
 
         
         [Theory]
         [InlineData()]
-        public void TestInsertRangeTarifa()
+        public void TestInsertRangeTariff()
         {
-            TarifaRepository tarifaRepository = new TarifaRepository();
+            TariffRepository tariffRepository = new TariffRepository();
 
-            List<Tarifa> novasTarifas = new List<Tarifa>()
+            List<Tariff> newsTariffs = new List<Tariff>()
             {
-                new Tarifa() { Id = 10, Origem = "013", Destino = "022", ValorMinuto = 1.50},
-                new Tarifa() { Id = 11, Origem = "022", Destino = "011", ValorMinuto = 2.50}
+                new Tariff() { Id = 10, Source = "013", Destination = "022", MinuteValue = 1.50},
+                new Tariff() { Id = 11, Source = "022", Destination = "011", MinuteValue = 2.50}
             };
         
 
-            List<Tarifa> listaComparacao = tarifaRepository.InsertRangeTarifa(novasTarifas);
-            foreach(Tarifa tarifa in novasTarifas)
+            List<Tariff> comparedList = tariffRepository.InsertRangeTariff(newsTariffs);
+            foreach(Tariff tariff in newsTariffs)
             {
-                Assert.Contains(tarifa, listaComparacao);
+                Assert.Contains(tariff, comparedList);
             }
         }
 
-            [Theory]
+        [Theory]
         [InlineData(3)]
-        public void TestDeleteTarifa(int id)
+        public void TestDeleteTariff(int id)
         {
-            TarifaRepository tarifaRepository = new TarifaRepository();
+            TariffRepository tariffRepository = new TariffRepository();
 
-            bool Retorno = tarifaRepository.DeleteTarifa(id);
+            bool Return = tariffRepository.DeleteTarifa(id);
 
-            Assert.False(Retorno);
+            Assert.False(Return);
         }
 
         [Theory]
         [InlineData()]
-        public void TestDeleteRangeTarifa()
+        public void TestDeleteRangeTariff()
         {
-            TarifaRepository tarifaRepository = new TarifaRepository();
+            TariffRepository tariffRepository = new TariffRepository();
 
-            List<Tarifa> tarifasRemovidas = new List<Tarifa>()
+            List<Tariff> removedTariffs = new List<Tariff>()
             {
-                new Tarifa() { Id = 4, Origem = "017", Destino = "011", ValorMinuto = 2.70},
-                new Tarifa() { Id = 5, Origem = "011", Destino = "018", ValorMinuto = 0.90}
+                new Tariff() { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.70},
+                new Tariff() { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.90}
             };
 
 
-            List<Tarifa> listaComparacao = tarifaRepository.DeleteRangeTarifa(tarifasRemovidas);
-            foreach (Tarifa tarifa in tarifasRemovidas)
+            List<Tariff> comparedList = tariffRepository.DeleteRangeTariff(removedTariffs);
+            foreach (Tariff tariff in removedTariffs)
             {
-                Assert.DoesNotContain(tarifa, listaComparacao);
+                Assert.DoesNotContain(tariff, comparedList);
             }
         }
 
-        // =================== Testes Plano ===================
+        // =================== Testes Plan ===================
 
         [Theory]
         [InlineData(1, "FaleMais 40", 40)]
-        public void TestUpdatePlano(int id, string nome, int minutosGratis)
+        public void TestUpdatePlan(int id, string name, int freeMinutes)
         {
-            PlanoRepository planoRepository = new PlanoRepository();
+            PlanRepository planRepository = new PlanRepository();
 
-            var novoPlano = new Plano() { Id = id, Nome = nome, MinutosGratis = minutosGratis };
+            var newPlan = new Plan() { Id = id, Name = name, FreeMinutes = freeMinutes };
 
-            Plano Retorno = planoRepository.UpdatePlano(novoPlano);
+            Plan Return = planRepository.UpdatePlan(newPlan);
 
-            Assert.Equal(novoPlano.Id, Retorno.Id);
-            Assert.Equal(novoPlano.Nome, Retorno.Nome);
-            Assert.Equal(novoPlano.MinutosGratis, Retorno.MinutosGratis);
+            Assert.Equal(newPlan.Id, Return.Id);
+            Assert.Equal(newPlan.Name, Return.Name);
+            Assert.Equal(newPlan.FreeMinutes, Return.FreeMinutes);
         }
 
         [Theory]
         [InlineData(2)]
-        public void TestSelectPlano(int id)
+        public void TestSelectPlan(int id)
         {
-            PlanoRepository planoRepository = new PlanoRepository();
+            PlanRepository planRepository = new PlanRepository();
 
-            var planoComparado = new Plano() { Id = 2, Nome = "FaleMais 60", MinutosGratis = 60 };
+            var comparedPlan = new Plan() { Id = 2, Name = "FaleMais 60", FreeMinutes = 60 };
 
-            Plano Retorno = planoRepository.GetPlanoById(id);
+            Plan Return = planRepository.GetPlanById(id);
 
-            Assert.Equal(planoComparado.Id, Retorno.Id);
-            Assert.Equal(planoComparado.Nome, Retorno.Nome);
-            Assert.Equal(planoComparado.MinutosGratis, Retorno.MinutosGratis);
+            Assert.Equal(comparedPlan.Id, Return.Id);
+            Assert.Equal(comparedPlan.Name, Return.Name);
+            Assert.Equal(comparedPlan.FreeMinutes, Return.FreeMinutes);
         }
 
         [Theory]
         [InlineData(4, "FaleMais 240", 240)]
-        public void TestInsertPlano(int id, string nome, int minutosGratis)
+        public void TestInsertPlan(int id, string name, int freeMinutes)
         {
-            PlanoRepository planoRepository = new PlanoRepository();
+            PlanRepository planRepository = new PlanRepository();
 
-            Plano planoInserido = new Plano() { Id = id, Nome = nome, MinutosGratis = minutosGratis };
+            Plan insertPlan = new Plan() { Id = id, Name = name, FreeMinutes = freeMinutes };
 
-            Plano Retorno = planoRepository.InsertPlano(planoInserido);
+            Plan Return = planRepository.InsertPlan(insertPlan);
 
-            Assert.Equal(planoInserido.Id, Retorno.Id);
-            Assert.Equal(planoInserido.Nome, Retorno.Nome);
-            Assert.Equal(planoInserido.MinutosGratis, Retorno.MinutosGratis);
+            Assert.Equal(insertPlan.Id, Return.Id);
+            Assert.Equal(insertPlan.Name, Return.Name);
+            Assert.Equal(insertPlan.FreeMinutes, Return.FreeMinutes);
         }
 
         [Theory]
         [InlineData(3)]
-        public void TestDeletePlano(int id)
+        public void TestDeletePlan(int id)
         {
-            PlanoRepository planoRepository = new PlanoRepository();
+            PlanRepository planRepository = new PlanRepository();
 
-            bool Retorno = planoRepository.DeletePlano(id);
+            bool Return = planRepository.DeletePlan(id);
 
-            Assert.False(Retorno);
+            Assert.False(Return);
         }
 
         [Theory]
         [InlineData()]
-        public void TestInsertRangePlano()
+        public void TestInsertRangePlan()
         {
-            PlanoRepository planoRepository = new PlanoRepository();
+            PlanRepository planRepository = new PlanRepository();
 
-            List<Plano> novosPlanos = new List<Plano>()
+            List<Plan> newPlans = new List<Plan>()
             {
-                new Plano() { Id = 10, Nome = "FaleMais 80", MinutosGratis = 80},
-                new Plano() { Id = 11, Nome = "FaleMais 100", MinutosGratis = 100},
+                new Plan() { Id = 10, Name = "FaleMais 80", FreeMinutes = 80},
+                new Plan() { Id = 11, Name = "FaleMais 100", FreeMinutes = 100},
             };
 
 
-            List<Plano> listaComparacao = planoRepository.InsertRangePlano(novosPlanos);
-            foreach (Plano plano in novosPlanos)
+            List<Plan> comparedList = planRepository.InsertRangePlan(newPlans);
+            foreach (Plan plan in newPlans)
             {
-                Assert.Contains(plano, listaComparacao);
+                Assert.Contains(plan, comparedList);
             }
         }
 
         [Theory]
         [InlineData()]
-        public void TestDeleteRangePlano()
+        public void TestDeleteRangePlan()
         {
-            PlanoRepository planoRepository = new PlanoRepository();
+            PlanRepository planRepository = new PlanRepository();
 
-            List<Plano> planosRemovidos = new List<Plano>()
+            List<Plan> removedPlans = new List<Plan>()
             {
-                new Plano(){ Id = 2, Nome = "FaleMais 60", MinutosGratis = 60},
-                new Plano(){ Id = 3, Nome = "FaleMais 120", MinutosGratis = 120}
+                new Plan(){ Id = 2, Name = "FaleMais 60", FreeMinutes = 60},
+                new Plan(){ Id = 3, Name = "FaleMais 120", FreeMinutes = 120}
             };
 
 
-            List<Plano> listaComparacao = planoRepository.DeleteRangePlano(planosRemovidos);
-            foreach (Plano plano in planosRemovidos)
+            List<Plan> comparedList = planRepository.DeleteRangePlan(removedPlans);
+            foreach (Plan plan in removedPlans)
             {
-                Assert.DoesNotContain(plano, listaComparacao);
+                Assert.DoesNotContain(plan, comparedList);
             }
         }
 
@@ -234,9 +233,9 @@ namespace SkynetzMVC.Test
         {
             HomeService homeService = new HomeService();
 
-            FiltroTarifa filtroTarifa = new FiltroTarifa() { Origem = origem, Destino = destino };
+            FilterTariff filtroTarifa = new FilterTariff() { Source = origem, Destination = destino };
 
-            FiltroPlano filtroPlano = new FiltroPlano() { Nome = planoUsado };
+            FilterPlan filtroPlano = new FilterPlan() { Name = planoUsado };
 
             var Results = homeService.ResultsDinamic(filtroPlano, filtroTarifa, minutosUsados);
 

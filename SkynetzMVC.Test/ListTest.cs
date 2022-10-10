@@ -13,40 +13,40 @@ namespace SkynetzMVC.Test
 
         [Theory]
         [InlineData("011", null, null)]
-        public void TestFiltroTarifa(string? origem, string? destino, double? valorMinuto)
+        public void TestFilterTariff(string? source, string? destination, double? minuteValue)
         {
-            TarifaRepository tarifaRepository = new TarifaRepository();
+            TariffRepository tariffRepository = new TariffRepository();
 
-            List<Tarifa> tarifasEsperadas = new List<Tarifa>()
+            List<Tariff> expectedTariffs = new List<Tariff>()
             {
-                new Tarifa() { Id = 1, Origem = "011", Destino = "016", ValorMinuto = 1.90},
-                new Tarifa() { Id = 3, Origem = "011", Destino = "017", ValorMinuto = 1.70},
-                new Tarifa() { Id = 5, Origem = "011", Destino = "018", ValorMinuto = 0.90}
+                new Tariff() { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.90},
+                new Tariff() { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.70},
+                new Tariff() { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.90}
             };
 
-            FiltroTarifa filtroTarifa = new FiltroTarifa() { Origem = origem, Destino = destino, ValorMinuto = valorMinuto };
+            FilterTariff filterTariff = new FilterTariff() { Source = source, Destination = destination, MinuteValue = minuteValue };
 
-            List<Tarifa> tarifas = tarifaRepository.GetByParameters(filtroTarifa);
+            List<Tariff> tariffs = tariffRepository.GetByParameters(filterTariff);
 
-            CollectionAssert.Equals(tarifasEsperadas, tarifas);
+            CollectionAssert.Equals(expectedTariffs, tariffs);
         }
 
         [Theory]
         [InlineData(null, 60)]
-        public void TestFiltroPlano(string? nome, int? minutosGratis)
+        public void TestFilterPlan(string? name, int? freeMinutes)
         {
-            PlanoRepository planoRepository = new PlanoRepository();
+            PlanRepository planRepository = new PlanRepository();
 
-            List<Plano> planosEsperados = new List<Plano>()
+            List<Plan> expectedPlans = new List<Plan>()
             {
-                new Plano(){ Id = 2, Nome = "FaleMais 60", MinutosGratis = 60}
+                new Plan(){ Id = 2, Name = "FaleMais 60", FreeMinutes = 60}
             };
 
-            FiltroPlano filtroPlano = new FiltroPlano() { Nome = nome, MinutosGratis = minutosGratis };
+            FilterPlan filterPlan = new FilterPlan() { Name = name, FreeMinutes = freeMinutes };
 
-            List<Plano> planos = planoRepository.GetByParameters(filtroPlano);
+            List<Plan> plans = planRepository.GetByParameters(filterPlan);
 
-            CollectionAssert.Equals(planosEsperados, planos);
+            CollectionAssert.Equals(expectedPlans, plans);
         }
     }
 }
