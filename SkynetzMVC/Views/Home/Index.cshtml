@@ -12,50 +12,33 @@
     <p>Consulte os gastos das suas chamadas telefonicas e veja quanto você pode economiza com nossos planos.</p>
 </div>
 
-<form>
+<form asp-action="PriceCalculation">
     <div class="form-row">
         <div class="form-group col-md-3">
-            <label for="source">Origem:</label>
-            <select class="form-control" name="soucers" id="source">
+            <label asp-for="Source">Origem e Destino:</label>
+            <select asp-for="Source" asp-items="@ViewBag.TariffItems" class="form-control" name="idTariff" id="idTariff">
                 <option value=null>Selecione...</option>
-                <option value="011">011</option>
-                <option value="016">016</option>
-                <option value="017">017</option>
-                <option value="018">018</option>
             </select>
         </div>
         <div class="form-group col-md-3">
-            <label for="destination">Destino:</label>
-            <select class="form-control" name="destinations" id="destination">
-                <option value=null>Selecione...</option>
-                <option value="011">011</option>
-                <option value="016">016</option>
-                <option value="017">017</option>
-                <option value="018">018</option>
-            </select>
-        </div >
-        <div class="form-group col-md-3">
-            <label for="usedMinutes">Minutos Usados:</label>
-            <input class="form-control" type="number" id="usedMinutes" />
+            <label asp-for="UsedMinutes">Minutos Usados:</label>
+            <input asp-for="UsedMinutes" class="form-control" type="number" id="usedMinutes" />
         </div>
         <div class="form-group col-md-3">
-            <label for="plan">Plano:</label>
-            <select class="form-control" name="plans" id="plan">
+            <label asp-for="UsedPlan">Plano:</label>
+            <select asp-for="UsedPlan" asp-items="@ViewBag.PlanItems" class="form-control" name="usedPlan" id="usedPlan">
                 <option value=null>Selecione...</option>
-                <option value="FaleMais 30">FaleMais 30</option>
-                <option value="FaleMais 60">FaleMais 60</option>
-                <option value="FaleMais 120">FaleMais 120</option>
             </select>
         </div>
     </div>
-    <div class="text-center">   
-        <button type="button" class="btn btn-primary">Consultar</button>
+    <div class="text-center">
+        <input type="submit" class="btn btn-primary" value="Calcular" />
     </div>
 </form>
 
 <div style="margin-top: 2em">
     <table class="table">
-        <thead >
+        <thead>
             <tr class="text-left">
                 <th scope="col">Origem</th>
                 <th scope="col">Destino</th>
@@ -67,12 +50,12 @@
         </thead>
         <tbody>
             <tr>
-                <th>teste</th>
-                <th>teste</th>
-                <th>teste</th>
-                <th>teste</th>
-                <th>teste</th>
-                <th>teste</th>
+                <td>@Html.DisplayFor(model=>model.Source)</td>
+                <td>@Html.DisplayFor(model=>model.Destination)</td>
+                <td>@Html.DisplayFor(model=>model.UsedMinutes)</td>
+                <td>@Html.DisplayFor(model=>model.UsedPlan)</td>
+                <td>@Html.DisplayFor(model=>model.PriceWithPlan)</td>
+                <td>@Html.DisplayFor(model=>model.PriceWithoutPlan)</td>
             </tr>
         </tbody>
     </table>

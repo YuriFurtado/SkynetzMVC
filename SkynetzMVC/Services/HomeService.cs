@@ -18,12 +18,11 @@ namespace SkynetzMVC.Services
             planRepository = new PlanRepository();
         }
 
-        public ResultDTO Result(string source, string destination, int usedMinutes, string usedPlan)
+        public ResultDTO Result(string idTariff, int usedMinutes, string usedPlan)
         {
             FilterPlan filterPlan = new FilterPlan() { Name = usedPlan };
-            FilterTariff filterTariff = new FilterTariff() { Source = source, Destination = destination };
 
-            Tariff tariff = tariffRepository.GetByParameters(filterTariff).FirstOrDefault();
+            Tariff tariff = tariffRepository.GetTariffById(Convert.ToInt32(idTariff));
             Plan plan = planRepository.GetByParameters(filterPlan).FirstOrDefault();
 
             double priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
