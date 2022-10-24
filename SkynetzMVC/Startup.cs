@@ -53,7 +53,7 @@ namespace SkynetzMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=AjaxHome}/{action=AjaxIndex}/{id?}");
             });
         }
     }

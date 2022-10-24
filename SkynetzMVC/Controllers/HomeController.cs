@@ -74,10 +74,6 @@ namespace SkynetzMVC.Controllers
             FillSelect();
 
             return View("Index", price);
-
-            //ViewBag.PriceCalculation = price;
-
-            //return RedirectToAction("Index");
         }
         
     }
