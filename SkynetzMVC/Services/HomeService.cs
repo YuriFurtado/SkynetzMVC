@@ -18,6 +18,7 @@ namespace SkynetzMVC.Services
             planRepository = new PlanRepository(db);
         }
 
+
         public ResultDTO Result(string idTariff, int usedMinutes, string usedPlan)
         {
             FilterPlan filterPlan = new FilterPlan() { Name = usedPlan };
@@ -25,7 +26,7 @@ namespace SkynetzMVC.Services
             Tariff tariff = tariffRepository.GetTariffById(Convert.ToInt32(idTariff));
             Plan plan = planRepository.GetByParameters(filterPlan).FirstOrDefault();
 
-            double priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
+            //double priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
             double priceWithPlan;
 
             if (plan.FreeMinutes >= usedMinutes)
@@ -34,7 +35,7 @@ namespace SkynetzMVC.Services
             }
             else
             {
-                priceWithPlan = (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10);
+                priceWithPlan = PriceExceeded(plan, tariff, usedMinutes);
             }
 
             ResultDTO resultDTO = new ResultDTO 
@@ -44,10 +45,22 @@ namespace SkynetzMVC.Services
                 UsedMinutes = usedMinutes, 
                 UsedPlan = plan.Name, 
                 PriceWithPlan = priceWithPlan.ToString("N2"), 
-                PriceWithoutPlan = priceWhitoutPlan.ToString("N2")
+                PriceWithoutPlan = PriceWithouPlan(tariff, usedMinutes).ToString("N2")
             };
 
             return resultDTO;
+        }
+
+        double percentageExceeded = 1.10;
+        
+        public double PriceExceeded(Plan plan, Tariff tariff, int usedMinutes)
+        {
+            return (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * percentageExceeded);
+        }
+
+        public double PriceWithouPlan (Tariff tariff, int usedMinutes)
+        {
+            return tariff.MinuteValue * usedMinutes;
         }
 
         public List<ResultDTO> ResultsDinamic(FilterPlan filterPlan, FilterTariff filterTariff, int usedMinutes)
