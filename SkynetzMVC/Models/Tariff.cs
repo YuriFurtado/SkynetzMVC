@@ -1,7 +1,10 @@
-﻿namespace SkynetzMVC.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SkynetzMVC.Models
 {
     public class Tariff
     {
+        [Key]
         public int Id { get; set; }
         public string Source { get; set; }
         public string Destination { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using SkynetzMVC.Models;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,11 @@ namespace SkynetzMVC.Repositories
 {
     public class TariffRepository
     {
-        public TariffRepository()
-        {
+        public readonly SkynetzDbContext _db;
 
+        public TariffRepository(SkynetzDbContext db)
+        {
+            _db = db;
         }
 
         public List<Tariff> Tariffs = new List<Tariff>()
@@ -26,18 +29,18 @@ namespace SkynetzMVC.Repositories
 
         public List<Tariff> GetAll() 
         { 
-            return Tariffs.ToList();
+            return _db.Tariffs.ToList();
         }
 
 
         public Tariff GetTariffById(int Id) 
         {
-            return Tariffs.AsQueryable().Where(x => x.Id == Id).FirstOrDefault();
+            return _db.Tariffs.AsQueryable().Where(x => x.Id == Id).FirstOrDefault();
         }
 
         public List<Tariff> GetByParameters(FilterTariff filters)
         {
-            var query = Tariffs.AsQueryable();
+            var query = _db.Tariffs.AsQueryable();
 
             if (!string.IsNullOrEmpty(filters.Source))
             {
@@ -59,15 +62,17 @@ namespace SkynetzMVC.Repositories
 
         public Tariff InsertTariff(Tariff tariff)
         {
-            Tariffs.Add(tariff);
+            _db.Tariffs.Add(tariff);
+            _db.SaveChanges();
             return GetTariffById(tariff.Id);
         }
 
 
         public List<Tariff> InsertRangeTariff(List<Tariff> newTariffs)
         {
-            Tariffs.AddRange(newTariffs);
-            return Tariffs;
+            _db.Tariffs.AddRange(newTariffs);
+            _db.SaveChanges();
+            return _db.Tariffs.ToList();
         }
 
 
@@ -77,23 +82,33 @@ namespace SkynetzMVC.Repositories
             update.Source = tariff.Source;
             update.Destination = tariff.Destination;
             update.MinuteValue = tariff.MinuteValue;
+            _db.Entry(update).State = EntityState.Modified;
+            _db.SaveChanges();
             return GetTariffById(update.Id);
         }
 
         public bool DeleteTarifa(int id)
         {
             var delete = GetTariffById(id);
-            Tariffs.Remove(delete);
-            bool HasTarifa = Tariffs.Contains(delete);
-            return HasTarifa;
+            _db.Tariffs.Remove(delete);
+            _db.SaveChanges();
+            var HasTariff = GetTariffById(delete.Id);
+            if (HasTariff == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         public List<Tariff> DeleteRangeTariff(List<Tariff> tariffsRemoved)
         {
             foreach(Tariff tariff in tariffsRemoved)
             {
-                Tariffs.Remove(tariff);
+                _db.Tariffs.Remove(tariff);
             }
-            return Tariffs;
+            return _db.Tariffs.ToList();
         }
 
 

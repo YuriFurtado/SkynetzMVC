@@ -13,7 +13,7 @@ namespace SkynetzMVC.Test
     public class ListTest
     {
 
-        [Theory]
+        /*[Theory]
         [InlineData("011", null, null)]
         public void TestFilterTariff(string? source, string? destination, double? minuteValue)
         {
@@ -95,6 +95,6 @@ namespace SkynetzMVC.Test
             };
 
             CollectionAssert.Equals(expectedDTOs, Results);
-        }
+        }*/
     }
 }

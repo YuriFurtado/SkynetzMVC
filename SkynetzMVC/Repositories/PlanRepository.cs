@@ -1,4 +1,5 @@
-﻿using SkynetzMVC.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SkynetzMVC.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -7,9 +8,12 @@ namespace SkynetzMVC.Repositories
 {
     public class PlanRepository
     {
-        public PlanRepository() 
+        public readonly SkynetzDbContext _db;
+
+        public PlanRepository(SkynetzDbContext db) 
         {
-            
+            _db = db;
+
         }
 
         public List<Plan> Plans = new List<Plan>() 
@@ -21,17 +25,17 @@ namespace SkynetzMVC.Repositories
 
         public List<Plan> GetAll()
         {
-            return Plans.ToList();
+            return _db.Plans.ToList();
         }
 
         public Plan GetPlanById(int id) 
         {
-            return Plans.AsQueryable().Where(x => x.Id == id).FirstOrDefault();
+            return _db.Plans.AsQueryable().Where(x => x.Id == id).FirstOrDefault();
         }
 
         public List<Plan> GetByParameters(FilterPlan filters)
         {
-            var query = Plans.AsQueryable();
+            var query = _db.Plans.AsQueryable();
 
             if (!string.IsNullOrEmpty(filters.Name))
             {
@@ -48,14 +52,16 @@ namespace SkynetzMVC.Repositories
 
         public Plan InsertPlan(Plan plan) 
         {
-            Plans.Add(plan);
+            _db.Plans.Add(plan);
+            _db.SaveChanges();
             return GetPlanById(plan.Id);
         }
 
         public List<Plan> InsertRangePlan(List<Plan> newPlans)
         {
-            Plans.AddRange(newPlans);
-            return Plans;
+            _db.Plans.AddRange(newPlans);
+            _db.SaveChanges();
+            return _db.Plans.ToList();
         }
 
         public Plan UpdatePlan(Plan plan)
@@ -63,24 +69,35 @@ namespace SkynetzMVC.Repositories
             var update = GetPlanById(plan.Id);
             update.Name = plan.Name;
             update.FreeMinutes = plan.FreeMinutes;
+            _db.Entry(update).State = EntityState.Modified;
+            _db.SaveChanges();
             return GetPlanById(update.Id);
         }
 
         public bool DeletePlan(int id)
         {
             var delete = GetPlanById(id);
-            Plans.Remove(delete);
-            bool HasPlano = Plans.Contains(delete);
-            return HasPlano;
+            _db.Plans.Remove(delete);
+            _db.SaveChanges();
+            var HasPlan = GetPlanById(delete.Id);
+            if(HasPlan == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public List<Plan> DeleteRangePlan(List<Plan> plansRemoved)
         {
             foreach (Plan plan in plansRemoved)
             {
-                Plans.Remove(plan);
+                _db.Plans.Remove(plan);
             }
-            return Plans;
+            _db.SaveChanges();
+            return _db.Plans.ToList();
         }
     }
 

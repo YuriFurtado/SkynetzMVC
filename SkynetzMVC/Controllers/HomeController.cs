@@ -16,11 +16,11 @@ namespace SkynetzMVC.Controllers
         public readonly TariffRepository tariffRepository;
         public readonly PlanRepository planRepository;
 
-        public HomeController()
+        public HomeController(SkynetzDbContext db)
         {
-            homeService = new HomeService();
-            tariffRepository = new TariffRepository();
-            planRepository = new PlanRepository();
+            homeService = new HomeService(db);
+            tariffRepository = new TariffRepository(db);
+            planRepository = new PlanRepository(db);
         }
 
         public void FillSelect()

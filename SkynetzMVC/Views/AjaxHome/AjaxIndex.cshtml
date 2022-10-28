@@ -14,7 +14,7 @@
         $(window).on("load", function TariffList() {
             var tariffSelect = $('#idTariff');
             var planSelect = $('#usedPlan');
-            
+
             $.ajax({
                 type: "get",
                 url: "AjaxHome/LoadSelectTariff",
@@ -49,11 +49,24 @@
 
             var data = { idTariff: tariff, usedMinutes: minutes, usedPlan: plan };
 
-            $.post("AjaxHome/PriceCalculation", data, function(price) {
-                alert(price.priceWithPlan + " " + price.priceWithoutPlan);6
+            $.post("AjaxHome/PriceCalculation", data, function (price) {
+                $("#tBody").append(
+                    "<tr>" +
+                        "<td>" + price.source + "</td>" +
+                        "<td>" + price.destination + "</td>" +
+                        "<td>" + price.usedMinutes + "</td>" +
+                        "<td>" + price.usedPlan + "</td>" +
+                        "<td>" + price.priceWithPlan + "</td>" +
+                        "<td>" + price.priceWithoutPlan + "</td>" +
+                    "</tr>"
+                );
             });
-            
         })
+
+        $("#btnClean").click(function () {
+            $('#tBody').empty();
+        })
+
     </script>
 }
 
@@ -62,29 +75,29 @@
         <p>Consulte os gastos das suas chamadas telefonicas e veja quanto você pode economiza com nossos planos.</p>
     </div>
 
-    <form>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="idTariff">Origem e Destino:</label>
-                <select class="form-control" name="idTariff" id="idTariff">
-                    <option value=null>Selecione...</option>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="UsedMinutes">Minutos Usados:</label>
-                <input class="form-control" type="number" id="usedMinutes" />
-            </div>
-            <div class="form-group col-md-3">
-                <label for="usedPlan">Plano:</label>
-                <select class="form-control" name="usedPlan" id="usedPlan">
-                    <option value=null>Selecione...</option>
-                </select>
-            </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="idTariff">Origem e Destino:</label>
+            <select class="form-control" name="idTariff" id="idTariff">
+                <option value=null>Selecione...</option>
+            </select>
         </div>
-        <div class="text-center">
-            <input type="submit" class="btn btn-primary" value="Calcular" id="btnPriceCalculation" />
+        <div class="form-group col-md-3">
+            <label for="UsedMinutes">Minutos Usados:</label>
+            <input class="form-control" type="number" id="usedMinutes" />
         </div>
-    </form>
+        <div class="form-group col-md-3">
+            <label for="usedPlan">Plano:</label>
+            <select class="form-control" name="usedPlan" id="usedPlan">
+                <option value=null>Selecione...</option>
+            </select>
+        </div>
+    </div>
+    <div class="text-center">
+        <input type="button" class="btn btn-primary" value="Calcular" id="btnPriceCalculation" />
+    </div>
+
 
     <div style="margin-top: 2em">
         <table class="table">
@@ -98,15 +111,11 @@
                     <th scope="col">Preço sem FaleMais</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+            <tbody id="tBody">          
             </tbody>
         </table>
+    </div>
+
+    <div class="text-center">
+        <input type="button" class="btn btn-primary" value="Limpar Consultas" id="btnClean" />
     </div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SkynetzMVC.Controllers.DTO;
+using SkynetzMVC.Models;
 using SkynetzMVC.Repositories;
 using SkynetzMVC.Services;
 using System.Threading.Tasks;
@@ -14,12 +15,11 @@ namespace SkynetzMVC.Controllers
         public readonly PlanRepository planRepository;
         public readonly HomeController homeController;
 
-        public AjaxHomeController()
+        public AjaxHomeController(SkynetzDbContext db)
         {
-            homeService = new HomeService();
-            tariffRepository = new TariffRepository();
-            planRepository = new PlanRepository();
-            homeController = new HomeController();
+            homeService = new HomeService(db);
+            tariffRepository = new TariffRepository(db);
+            planRepository = new PlanRepository(db);
         }
 
         public IActionResult AjaxIndex()
@@ -45,7 +45,7 @@ namespace SkynetzMVC.Controllers
 
             ResultDTO price = homeService.Result(idTariff, usedMinutes, usedPlan);
 
-            return Json(price);
+            return Ok(price);
         }
     }
 }
