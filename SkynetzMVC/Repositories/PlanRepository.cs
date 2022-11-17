@@ -16,13 +16,7 @@ namespace SkynetzMVC.Repositories
             _db = db;
 
         }
-
-        //public List<Plan> Plans = new List<Plan>() 
-        //{ 
-        //    new Plan(){ Id = 1, Name = "FaleMais 30", FreeMinutes = 30},
-        //    new Plan(){ Id = 2, Name = "FaleMais 60", FreeMinutes = 60},
-        //    new Plan(){ Id = 3, Name = "FaleMais 120", FreeMinutes = 120}
-        //};
+        
 
         public List<Plan> GetAll()
         {

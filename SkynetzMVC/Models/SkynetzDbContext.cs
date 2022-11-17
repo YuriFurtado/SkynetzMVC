@@ -7,6 +7,12 @@ namespace SkynetzMVC.Models
     {
         public SkynetzDbContext(DbContextOptions<SkynetzDbContext> options) : base(options)
         {
+
+        }
+
+        public SkynetzDbContext()
+        {
+
         }
 
         public DbSet<Plan> Plans { get; set; }
