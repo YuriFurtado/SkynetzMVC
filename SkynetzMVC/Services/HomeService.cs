@@ -26,7 +26,6 @@ namespace SkynetzMVC.Services
             Tariff tariff = tariffRepository.GetTariffById(Convert.ToInt32(idTariff));
             Plan plan = planRepository.GetByParameters(filterPlan).FirstOrDefault();
 
-            //double priceWhitoutPlan = tariff.MinuteValue * usedMinutes;
             double priceWithPlan;
 
             if (plan.FreeMinutes >= usedMinutes)
@@ -104,66 +103,5 @@ namespace SkynetzMVC.Services
             return resultDTOs;
         }
 
-        // Métodos Antigos
-    //    public string Results(string origem, string destino, int minutosUsados, string planoUsado)
-    //    {
-    //        int? minutosPlano = MinutosPorPlano(planoUsado);
-    //        double? precoMinuto = PrecoPorMinuto(origem, destino);
-    //        double precoComPlano;
-
-    //        if (minutosPlano == null || precoMinuto == null)
-    //        {
-    //            return "Erro ao gerar os valores";
-    //        }
-
-    //        double precoSemPlano = (double)precoMinuto * minutosUsados;
-
-    //        if (minutosPlano >= minutosUsados)
-    //        {
-    //            precoComPlano = 0;
-    //        }
-    //        else
-    //        {
-    //            precoComPlano = (minutosUsados - (int)minutosPlano) * ((double)precoMinuto * 1.10);
-    //        }
-
-    //        return ("Valor com Plano: " + precoComPlano.ToString("N2") + " - Valor sem Plano: " + precoSemPlano.ToString("N2"));
-    //    }
-
-    //    public int? MinutosPorPlano(string plano)
-    //    {
-    //        if (plano.Equals("FaleMais 30")) return 30;
-    //        if (plano.Equals("FaleMais 60")) return 60;
-    //        if (plano.Equals("FaleMais 120")) return 120;
-
-    //        return null;
-    //    }
-
-    //    public double? PrecoPorMinuto(string origem, string destino)
-    //    {
-    //        if (origem.Equals("011"))
-    //        {
-    //            if (destino.Equals("016")) return 1.90;
-    //            if (destino.Equals("017")) return 1.70;
-    //            if (destino.Equals("018")) return 0.90;
-    //        }
-
-    //        if (origem.Equals("016"))
-    //        {
-    //            if (destino.Equals("011")) return 2.90;
-    //        }
-
-    //        if (origem.Equals("017"))
-    //        {
-    //            if (destino.Equals("011")) return 2.70;
-    //        }
-
-    //        if (origem.Equals("018"))
-    //        {
-    //            if (destino.Equals("011")) return 1.90;
-    //        }
-
-    //        return null;
-    //    }
     }
 }

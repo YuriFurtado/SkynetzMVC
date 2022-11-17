@@ -17,15 +17,15 @@ namespace SkynetzMVC.Repositories
             _db = db;
         }
 
-        public List<Tariff> Tariffs = new List<Tariff>()
-        {
-            new Tariff() { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.90},
-            new Tariff() { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.90},
-            new Tariff() { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.70},
-            new Tariff() { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.70},
-            new Tariff() { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.90},
-            new Tariff() { Id = 6, Source = "018", Destination = "011", MinuteValue = 1.90}
-        };
+        //public List<Tariff> Tariffs = new List<Tariff>()
+        //{
+        //    new Tariff() { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.90},
+        //    new Tariff() { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.90},
+        //    new Tariff() { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.70},
+        //    new Tariff() { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.70},
+        //    new Tariff() { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.90},
+        //    new Tariff() { Id = 6, Source = "018", Destination = "011", MinuteValue = 1.90}
+        //};
 
         public List<Tariff> GetAll() 
         { 

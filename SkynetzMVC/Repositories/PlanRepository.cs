@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SkynetzMVC.Interfaces;
 using SkynetzMVC.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace SkynetzMVC.Repositories
 {
-    public class PlanRepository
+    public class PlanRepository : IPlanRepository
     {
         public readonly SkynetzDbContext _db;
 
@@ -16,12 +17,12 @@ namespace SkynetzMVC.Repositories
 
         }
 
-        public List<Plan> Plans = new List<Plan>() 
-        { 
-            new Plan(){ Id = 1, Name = "FaleMais 30", FreeMinutes = 30},
-            new Plan(){ Id = 2, Name = "FaleMais 60", FreeMinutes = 60},
-            new Plan(){ Id = 3, Name = "FaleMais 120", FreeMinutes = 120}
-        };
+        //public List<Plan> Plans = new List<Plan>() 
+        //{ 
+        //    new Plan(){ Id = 1, Name = "FaleMais 30", FreeMinutes = 30},
+        //    new Plan(){ Id = 2, Name = "FaleMais 60", FreeMinutes = 60},
+        //    new Plan(){ Id = 3, Name = "FaleMais 120", FreeMinutes = 120}
+        //};
 
         public List<Plan> GetAll()
         {
@@ -64,15 +65,15 @@ namespace SkynetzMVC.Repositories
             return _db.Plans.ToList();
         }
 
-        public Plan UpdatePlan(Plan plan)
-        {
-            var update = GetPlanById(plan.Id);
-            update.Name = plan.Name;
-            update.FreeMinutes = plan.FreeMinutes;
-            _db.Entry(update).State = EntityState.Modified;
-            _db.SaveChanges();
-            return GetPlanById(update.Id);
-        }
+        //public Plan UpdatePlan(Plan plan)
+        //{
+        //    var update = GetPlanById(plan.Id);
+        //    update.Name = plan.Name;
+        //    update.FreeMinutes = plan.FreeMinutes;
+        //    _db.Entry(update).State = EntityState.Modified;
+        //    _db.SaveChanges();
+        //    return GetPlanById(update.Id);
+        //}
 
         public bool DeletePlan(int id)
         {
