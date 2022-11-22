@@ -17,11 +17,6 @@ namespace SkynetzMVC.Test
 {
     public class ModelTest
     {
-        Tariff _tariff;
-
-        Mock<Tariff> _tariffMock;
-        Mock<Plan> _planMock;
-
         [Theory(DisplayName = "Deve retornar com sucesso o calculo do preço da ligação sem o uso do plano")]
         [InlineData(5, "012", "011", 2.00)]
         public void Should_Return_Success_PriceWithoutPlan(int id, string source, string destination, double minuteValue)

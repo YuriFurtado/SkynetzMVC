@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
+using SkynetzMVC.Interfaces;
 using SkynetzMVC.Models;
 using SkynetzMVC.Repositories;
 using System;
@@ -13,7 +14,13 @@ namespace SkynetzMVC.Test
 {
     public class RepositoryTest
     {
-        public Mock<SkynetzDbContext> _db = new Mock<SkynetzDbContext>();
+        //public Mock<SkynetzDbContext> mockContext = new Mock<SkynetzDbContext>();
+
+        //public RepositoryTest(Mock<SkynetzDbContext> db = null)
+        //{
+        //    mockContext = db ?? new Mock<SkynetzDbContext>();
+        //}
+        public readonly SkynetzDbContext _db;
 
         [Fact]
         public void Should_Return_Success_GetAllPlans()
@@ -38,6 +45,24 @@ namespace SkynetzMVC.Test
             //Assert
             Assert.NotNull(plans);
             Assert.Equal(data.Count(), plans.Count());
+        }
+
+        [Fact]
+        public void Should_Return_Success_GetAllPlans2()
+        {
+            //Arrange
+            var data = new List<Plan> { new Plan { Id = 1, Name = "FaleMais 30", FreeMinutes = 30 }, new Plan { Id = 2, Name = "FaleMais 60", FreeMinutes = 60 }, new Plan { Id = 3, Name = "FaleMais 120", FreeMinutes = 120 } }.AsQueryable();
+            Mock<IPlanRepository> mock = new Mock<IPlanRepository>();
+            mock.Setup(m => m.GetAll()).Returns(data);
+            PlanRepository planRepository = new PlanRepository(_db);
+
+            //Act
+            var expected = mock.Object.GetAll();
+            var result = planRepository.GetAll();
+
+            //Assert
+            Assert.NotNull(expected);
+            Assert.Equal(expected.Count(), result.Count());
         }
     }
 }

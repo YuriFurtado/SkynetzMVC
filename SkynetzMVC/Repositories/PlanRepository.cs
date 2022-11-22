@@ -11,16 +11,15 @@ namespace SkynetzMVC.Repositories
     {
         public readonly SkynetzDbContext _db;
 
-        public PlanRepository(SkynetzDbContext db) 
+        public PlanRepository(SkynetzDbContext db)
         {
             _db = db;
-
         }
         
 
-        public List<Plan> GetAll()
+        public IQueryable<Plan> GetAll()
         {
-            return _db.Plans.ToList();
+            return _db.Plans.AsQueryable();
         }
 
         public Plan GetPlanById(int id) 
@@ -59,15 +58,15 @@ namespace SkynetzMVC.Repositories
             return _db.Plans.ToList();
         }
 
-        //public Plan UpdatePlan(Plan plan)
-        //{
-        //    var update = GetPlanById(plan.Id);
-        //    update.Name = plan.Name;
-        //    update.FreeMinutes = plan.FreeMinutes;
-        //    _db.Entry(update).State = EntityState.Modified;
-        //    _db.SaveChanges();
-        //    return GetPlanById(update.Id);
-        //}
+        public Plan UpdatePlan(Plan plan)
+        {
+            var update = GetPlanById(plan.Id);
+            update.Name = plan.Name;
+            update.FreeMinutes = plan.FreeMinutes;
+            _db.Entry(update).State = EntityState.Modified;
+            _db.SaveChanges();
+            return GetPlanById(update.Id);
+        }
 
         public bool DeletePlan(int id)
         {
