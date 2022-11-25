@@ -17,9 +17,9 @@ namespace SkynetzMVC.Repositories
         }
         
 
-        public IQueryable<Plan> GetAll()
+        public List<Plan> GetAll()
         {
-            return _db.Plans.AsQueryable();
+            return _db.Plans.ToList();
         }
 
         public Plan GetPlanById(int id) 

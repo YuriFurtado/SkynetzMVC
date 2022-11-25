@@ -9,7 +9,7 @@ namespace SkynetzMVC.Interfaces
 {
     public interface IPlanRepository
     {
-        IQueryable<Plan> GetAll();
+        List<Plan> GetAll();
         Plan GetPlanById(int id);
         List<Plan> GetByParameters(FilterPlan filters);
         Plan InsertPlan(Plan plan);

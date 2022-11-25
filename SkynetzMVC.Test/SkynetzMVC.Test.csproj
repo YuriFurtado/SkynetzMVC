@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SkynetzAPI\SkynetzAPI.csproj" />
     <ProjectReference Include="..\SkynetzMVC\SkynetzMVC.csproj" />
   </ItemGroup>
 
