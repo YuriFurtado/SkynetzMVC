@@ -78,5 +78,14 @@ namespace SkynetzAPI.Controllers.Plan
             return Ok(plan);
         }
 
+        [HttpDelete]
+        [Route("Plan/{id}")]
+        public ActionResult DeletePlan([FromHeader] int id)
+        {
+            var returnDelete = planService.DeletePlan(id);
+
+            return Ok(returnDelete);
+        }
+
     }
 }

@@ -47,22 +47,22 @@ namespace SkynetzMVC.Test
             Assert.Equal(data.Count(), plans.Count());
         }
 
-        [Fact]
-        public void Should_Return_Success_GetAllPlans2()
-        {
-            //Arrange
-            var data = new List<Plan> { new Plan { Id = 1, Name = "FaleMais 30", FreeMinutes = 30 }, new Plan { Id = 2, Name = "FaleMais 60", FreeMinutes = 60 }, new Plan { Id = 3, Name = "FaleMais 120", FreeMinutes = 120 } }.AsQueryable();
-            Mock<IPlanRepository> mock = new Mock<IPlanRepository>();
-            mock.Setup(m => m.GetAll()).Returns(data);
-            PlanRepository planRepository = new PlanRepository(_db);
+        //[Fact]
+        //public void Should_Return_Success_GetAllPlans2()
+        //{
+        //    //Arrange
+        //    //var data = new List<Plan> { new Plan { Id = 1, Name = "FaleMais 30", FreeMinutes = 30 }, new Plan { Id = 2, Name = "FaleMais 60", FreeMinutes = 60 }, new Plan { Id = 3, Name = "FaleMais 120", FreeMinutes = 120 } }.AsQueryable();
+        //    //Mock<IPlanRepository> mock = new Mock<IPlanRepository>();
+        //    //mock.Setup(m => m.GetAll()).Returns(data);
+        //    //PlanRepository planRepository = new PlanRepository(_db);
 
-            //Act
-            var expected = mock.Object.GetAll();
-            var result = planRepository.GetAll();
+        //    //Act
+        //    var expected = mock.Object.GetAll();
+        //    var result = planRepository.GetAll();
 
-            //Assert
-            Assert.NotNull(expected);
-            Assert.Equal(expected.Count(), result.Count());
-        }
+        //    //Assert
+        //    Assert.NotNull(expected);
+        //    Assert.Equal(expected.Count(), result.Count());
+        //}
     }
 }

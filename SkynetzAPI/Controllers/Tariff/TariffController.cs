@@ -65,6 +65,7 @@ namespace SkynetzAPI.Controllers.Tariff
 
             return Ok(tariff);
         }
+
     }
 
 

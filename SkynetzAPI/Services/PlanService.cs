@@ -83,6 +83,11 @@ namespace SkynetzAPI.Services
             return returnPlan != null;
         }
 
+        public bool DeletePlan(int id)
+        {
+            return(planRepository.DeletePlan(id));
+        }
+
         // TODO - Criar Mapeamento DTO to Model
 
         public PlanDTO ModelToDTO(Plan plan)
