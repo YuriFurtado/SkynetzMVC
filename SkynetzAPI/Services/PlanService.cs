@@ -25,11 +25,7 @@ namespace SkynetzAPI.Services
 
             foreach(Plan plan in plans)
             {
-                PlanDTO planDTO = new PlanDTO
-                {
-                    Name = plan.Name,
-                    FreeMinutes = plan.FreeMinutes
-                };
+                PlanDTO planDTO = ModelToDTO(plan);
 
                 plansDTOS.Add(planDTO);
             }
@@ -41,28 +37,27 @@ namespace SkynetzAPI.Services
         {
             Plan plan = planRepository.GetPlanById(id);
 
-            PlanDTO planDTO = new PlanDTO
-            {
-                Name = plan.Name,
-                FreeMinutes = plan.FreeMinutes
-            };
+            PlanDTO planDTO = ModelToDTO(plan);
 
             return planDTO;
         }
 
-        public List<PlanDTO> GetPlanByParameter(FilterPlan filterPlan)
+        public List<PlanDTO> GetPlanByParameter(PlanDTO filterDTO) // Criar filtro com base na DTO
         {
+            FilterPlan filterPlan = new FilterPlan
+            {
+                Id = filterDTO.Id,
+                Name = filterDTO.Name,
+                FreeMinutes = filterDTO.FreeMinutes
+            };
+            
             List<Plan> plans = planRepository.GetByParameters(filterPlan);
 
             List<PlanDTO> plansDTOS = new List<PlanDTO>();
             
             foreach(Plan plan in plans)
             {
-                PlanDTO planDTO = new PlanDTO
-                {
-                    Name = plan.Name,
-                    FreeMinutes = plan.FreeMinutes
-                };
+                PlanDTO planDTO = ModelToDTO(plan);
 
                 plansDTOS.Add(planDTO);
             }
@@ -70,24 +65,44 @@ namespace SkynetzAPI.Services
             return plansDTOS;
         }
 
-        public PlanDTO InsertPlan(string name, int freeMinutes)
+        public bool InsertPlan(PlanDTO planDTO)
         {
-            Plan insertPlan = new Plan
-            {
-                Name = name,
-                FreeMinutes = freeMinutes
-            };
+            Plan insertPlan = DTOToModel(planDTO);
 
             Plan returnPlan = planRepository.InsertPlan(insertPlan);
 
-            PlanDTO planDTO = new PlanDTO
-            {
-                Name = insertPlan.Name,
-                FreeMinutes = insertPlan.FreeMinutes
-            };
-
-            return planDTO;
+            return returnPlan != null;
         }
 
+        public bool UpdatePlan(PlanDTO planDTO)
+        {
+            Plan updatePlan = DTOToModel(planDTO);
+
+            Plan returnPlan = planRepository.UpdatePlan(updatePlan);
+
+            return returnPlan != null;
+        }
+
+        // TODO - Criar Mapeamento DTO to Model
+
+        public PlanDTO ModelToDTO(Plan plan)
+        {
+            return new PlanDTO
+            {
+                Id = plan.Id,
+                Name = plan.Name,
+                FreeMinutes = plan.FreeMinutes
+            };
+        }
+
+        public Plan DTOToModel(PlanDTO planDTO)
+        {
+            return new Plan
+            {
+                Id = (int)planDTO.Id,
+                Name = planDTO.Name,
+                FreeMinutes = (int)planDTO.FreeMinutes
+            };
+        }
     }
 }

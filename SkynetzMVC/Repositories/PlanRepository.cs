@@ -97,6 +97,7 @@ namespace SkynetzMVC.Repositories
 
     public class FilterPlan
     {
+        public int? Id { get; set; }
         public string? Name { get; set; }
         public int? FreeMinutes { get; set; }
     }

@@ -8,10 +8,13 @@ namespace SkynetzAPI.Controllers.Plan.Response
 {
     public class PlanDTO
     {
+        [JsonProperty("id")]
+        public int? Id { get; set; }
+        
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonProperty("freeMinutes")]
-        public int FreeMinutes { get; set; }
+        public int? FreeMinutes { get; set; }
     }
 }

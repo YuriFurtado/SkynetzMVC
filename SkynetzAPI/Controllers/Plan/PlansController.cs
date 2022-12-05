@@ -8,26 +8,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SkynetzAPI.Controllers.Plan.Response;
 
 namespace SkynetzAPI.Controllers.Plan
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class PlansController : ControllerBase
     {
         private readonly PlanService planService;
 
+        // TODO - Criar DTO para exception - Success Bool - Message String
 
         [HttpGet]
-        [Route("GetAll")]
+        [Route("Plan")]
         public ActionResult GetAllPlan()
         {
             return Ok(planService.GetAllPlans());
         }
 
         [HttpGet]
-        [Route("GetPlanById")]
-        public ActionResult GetPlanById(int id)
+        [Route("Plan/{id}")]
+        public ActionResult GetPlanById([FromHeader]int id)
         {
             var plan = planService.GetPlanById(id);
             if (plan != null)
@@ -41,11 +43,10 @@ namespace SkynetzAPI.Controllers.Plan
         }
 
         [HttpGet]
-        [Route("GetPlansByParameter")]
-        public ActionResult GetPlansByParameter(string name, int freeMinutes)
+        [Route("Plan/Filter")]
+        public ActionResult GetPlansByParameter([FromBody]PlanDTO filterPlan) // TODO - Utilizar DTO para o Filtro
         {
-            FilterPlan filterPlan = new FilterPlan { Name = name, FreeMinutes = freeMinutes };
-
+            
             var plans = planService.GetPlanByParameter(filterPlan);
 
             if (plans.Any())
@@ -59,13 +60,23 @@ namespace SkynetzAPI.Controllers.Plan
             }
         }
 
-        [HttpPut]
-        [Route("InsertPlan")]
-        public ActionResult InsertPlan(string name, int freeMinutes)
+        [HttpPost]
+        [Route("Plan")]
+        public ActionResult InsertPlan([FromBody]PlanDTO planDTO)
         {
-            var plan = planService.InsertPlan(name, freeMinutes);
+            var plan = planService.InsertPlan(planDTO);
 
             return Ok(plan);
         }
+
+        [HttpPut]
+        [Route("Plan")]
+        public ActionResult UpdatePlan([FromBody] PlanDTO planDTO)
+        {
+            var plan = planService.UpdatePlan(planDTO);
+
+            return Ok(plan);
+        }
+
     }
 }

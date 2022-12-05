@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SkynetzAPI.Controllers.Tariff.Response;
 using SkynetzAPI.Services;
 using SkynetzMVC.Repositories;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SkynetzAPI.Controllers.Tariff
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class TariffController : ControllerBase
     {
@@ -17,26 +18,24 @@ namespace SkynetzAPI.Controllers.Tariff
         private readonly TariffService tariffService;
 
         [HttpGet]
-        [Route("GetAllPlans")]
+        [Route("Tariff")]
         public ActionResult GetAllTariffs()
         {
             return Ok(tariffService.GetAllTariffs());
         }
 
         [HttpGet]
-        [Route("GetTariffById")]
-        public ActionResult GetTariffById(int id)
+        [Route("Tariff/{id}")]
+        public ActionResult GetTariffById([FromHeader]int id)
         {
             return Ok(tariffService.GetTariffById(id));
         }
 
         [HttpGet]
-        [Route("GetTariffsByParameter")]
-        public ActionResult GetTariffsByParameter(string source, string destination, double minuteValue)
+        [Route("Tariff/Filter")]
+        public ActionResult GetTariffsByParameter([FromBody] TariffDTO tariffDTO)
         {
-            FilterTariff filterTariff = new FilterTariff { Source = source, Destination = destination, MinuteValue = minuteValue };
-
-            var tariffs = tariffService.GetTariffsByParameter(filterTariff);
+            var tariffs = tariffService.GetTariffsByParameter(tariffDTO);
 
             if (tariffs.Any())
             {
@@ -47,6 +46,24 @@ namespace SkynetzAPI.Controllers.Tariff
                 return NotFound();
 
             }
+        }
+
+        [HttpPost]
+        [Route("Tariff")]
+        public ActionResult InsertTariff([FromBody]TariffDTO tariffDTO)
+        {
+            var tariff = tariffService.InsertTariff(tariffDTO);
+
+            return Ok(tariff);
+        }
+
+        [HttpPut]
+        [Route("Tariff")]
+        public ActionResult UpdateTariff([FromBody]TariffDTO tariffDTO)
+        {
+            var tariff = tariffService.UpdateTariff(tariffDTO);
+
+            return Ok(tariff);
         }
     }
 

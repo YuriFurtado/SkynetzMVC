@@ -8,13 +8,16 @@ namespace SkynetzAPI.Controllers.Tariff.Response
 {
     public class TariffDTO
     {
+        [JsonProperty("id")]
+        public int? Id { get; set; }
+
         [JsonProperty("source")]
-        public string Source { get; set; }
+        public string? Source { get; set; }
 
         [JsonProperty("destination")]
-        public string Destination { get; set; }
+        public string? Destination { get; set; }
 
         [JsonProperty("MinuteValue")]
-        public double MinuteValue { get; set; }
+        public double? MinuteValue { get; set; }
     }
 }

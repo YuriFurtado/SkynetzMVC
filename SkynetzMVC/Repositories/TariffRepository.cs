@@ -66,7 +66,7 @@ namespace SkynetzMVC.Repositories
         }
 
 
-        public Tariff UpdateTarifa(Tariff tariff) 
+        public Tariff UpdateTariff(Tariff tariff) 
         {
             var update = GetTariffById(tariff.Id);
             update.Source = tariff.Source;
@@ -77,7 +77,7 @@ namespace SkynetzMVC.Repositories
             return GetTariffById(update.Id);
         }
 
-        public bool DeleteTarifa(int id)
+        public bool DeleteTariff(int id)
         {
             var delete = GetTariffById(id);
             _db.Tariffs.Remove(delete);
@@ -106,6 +106,7 @@ namespace SkynetzMVC.Repositories
 
     public class FilterTariff
     {
+        public int? Id { get; set; }
         public string? Source { get; set; }
         public string? Destination { get; set; }
         public double? MinuteValue { get; set; }
