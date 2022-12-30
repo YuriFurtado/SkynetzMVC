@@ -54,7 +54,7 @@ namespace SkynetzMVC.Services
         
         public double PriceExceeded(Plan plan, Tariff tariff, int usedMinutes)
         {
-            return (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * percentageExceeded);
+            return (double)((usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * percentageExceeded));
         }
 
         public double PriceWithouPlan (Tariff tariff, int usedMinutes)
@@ -83,7 +83,7 @@ namespace SkynetzMVC.Services
                     }
                     else
                     {
-                        priceWithPlan = (usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10);
+                        priceWithPlan = (double)((usedMinutes - plan.FreeMinutes) * (tariff.MinuteValue * 1.10));
                     }
 
                     ResultDTO resultDTO = new ResultDTO

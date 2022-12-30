@@ -18,73 +18,120 @@ namespace SkynetzAPI.Controllers.Plan
     {
         private readonly PlanService planService;
 
-        // TODO - Criar DTO para exception - Success Bool - Message String
+        public PlansController(SkynetzDbContext db)
+        {
+            planService = new PlanService(db);
+        }
+
+        // TODO - Realocar DTO para pasta Response
 
         [HttpGet]
         [Route("Plan")]
         public ActionResult GetAllPlan()
         {
-            return Ok(planService.GetAllPlans());
+            try
+            {
+                var plans = planService.GetAllPlans();
+                return Ok(plans);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+            }
         }
 
         [HttpGet]
         [Route("Plan/{id}")]
-        public ActionResult GetPlanById([FromHeader]int id)
+        public ActionResult GetPlanById([FromHeader] int id)
         {
-            var plan = planService.GetPlanById(id);
-            if (plan != null)
+            try
             {
-                return Ok(plan);
+                var plan = planService.GetPlanById(id);
+                if (plan != null)
+                {
+                    return Ok(plan);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else 
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
             }
         }
 
         [HttpGet]
         [Route("Plan/Filter")]
-        public ActionResult GetPlansByParameter([FromBody]PlanDTO filterPlan) // TODO - Utilizar DTO para o Filtro
+        public ActionResult GetPlansByParameter([FromBody] PlanDTO filterPlan)
         {
-            
-            var plans = planService.GetPlanByParameter(filterPlan);
+            try
+            {
+                var plans = planService.GetPlanByParameter(filterPlan);
 
-            if (plans.Any())
-            {
-                return Ok(plans);
+                if (plans.Any())
+                {
+                    return Ok(plans);
+                }
+                else
+                {
+                    return NotFound();
+
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound();
-                
+                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
             }
         }
 
         [HttpPost]
         [Route("Plan")]
-        public ActionResult InsertPlan([FromBody]PlanDTO planDTO)
+        public ActionResult InsertPlan([FromBody] PlanDTO planDTO)
         {
-            var plan = planService.InsertPlan(planDTO);
+            try
+            {
+                var plan = planService.InsertPlan(planDTO);
 
-            return Ok(plan);
+                return Ok(plan);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+            }
         }
 
         [HttpPut]
         [Route("Plan")]
         public ActionResult UpdatePlan([FromBody] PlanDTO planDTO)
         {
-            var plan = planService.UpdatePlan(planDTO);
+            try
+            {
+                var plan = planService.UpdatePlan(planDTO);
 
-            return Ok(plan);
+                return Ok(plan);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+            }
         }
 
         [HttpDelete]
         [Route("Plan/{id}")]
         public ActionResult DeletePlan([FromHeader] int id)
         {
-            var returnDelete = planService.DeletePlan(id);
+            try
+            {
+                var returnDelete = planService.DeletePlan(id);
 
-            return Ok(returnDelete);
+                return Ok(returnDelete);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+            }
         }
 
     }

@@ -48,7 +48,7 @@ namespace SkynetzMVC.Repositories
         {
             _db.Plans.Add(plan);
             _db.SaveChanges();
-            return GetPlanById(plan.Id);
+            return GetPlanById((int)plan.Id);
         }
 
         public List<Plan> InsertRangePlan(List<Plan> newPlans)
@@ -60,12 +60,12 @@ namespace SkynetzMVC.Repositories
 
         public Plan UpdatePlan(Plan plan)
         {
-            var update = GetPlanById(plan.Id);
+            var update = GetPlanById((int)plan.Id);
             update.Name = plan.Name;
             update.FreeMinutes = plan.FreeMinutes;
             _db.Entry(update).State = EntityState.Modified;
             _db.SaveChanges();
-            return GetPlanById(update.Id);
+            return GetPlanById((int)update.Id);
         }
 
         public bool DeletePlan(int id)
@@ -73,7 +73,7 @@ namespace SkynetzMVC.Repositories
             var delete = GetPlanById(id);
             _db.Plans.Remove(delete);
             _db.SaveChanges();
-            var HasPlan = GetPlanById(delete.Id);
+            var HasPlan = GetPlanById((int)delete.Id);
             if(HasPlan == null)
             {
                 return false;

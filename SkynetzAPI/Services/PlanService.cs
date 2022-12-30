@@ -23,7 +23,7 @@ namespace SkynetzAPI.Services
 
             List<PlanDTO> plansDTOS = new List<PlanDTO>();
 
-            foreach(Plan plan in plans)
+            foreach (Plan plan in plans)
             {
                 PlanDTO planDTO = ModelToDTO(plan);
 
@@ -42,7 +42,7 @@ namespace SkynetzAPI.Services
             return planDTO;
         }
 
-        public List<PlanDTO> GetPlanByParameter(PlanDTO filterDTO) // Criar filtro com base na DTO
+        public List<PlanDTO> GetPlanByParameter(PlanDTO filterDTO)
         {
             FilterPlan filterPlan = new FilterPlan
             {
@@ -50,12 +50,12 @@ namespace SkynetzAPI.Services
                 Name = filterDTO.Name,
                 FreeMinutes = filterDTO.FreeMinutes
             };
-            
+
             List<Plan> plans = planRepository.GetByParameters(filterPlan);
 
             List<PlanDTO> plansDTOS = new List<PlanDTO>();
-            
-            foreach(Plan plan in plans)
+
+            foreach (Plan plan in plans)
             {
                 PlanDTO planDTO = ModelToDTO(plan);
 
@@ -85,29 +85,47 @@ namespace SkynetzAPI.Services
 
         public bool DeletePlan(int id)
         {
-            return(planRepository.DeletePlan(id));
+            return (planRepository.DeletePlan(id));
         }
 
-        // TODO - Criar Mapeamento DTO to Model
 
         public PlanDTO ModelToDTO(Plan plan)
         {
-            return new PlanDTO
+            try
             {
-                Id = plan.Id,
-                Name = plan.Name,
-                FreeMinutes = plan.FreeMinutes
-            };
+                PlanDTO planDTO = new PlanDTO { };
+
+                planDTO.Id = plan.Id;
+                planDTO.Name = plan.Name;
+                planDTO.FreeMinutes = plan.FreeMinutes;
+
+                return planDTO;
+            }
+            catch
+            {
+                throw new Exception("Erro ao converter dados");
+            }
         }
 
         public Plan DTOToModel(PlanDTO planDTO)
         {
-            return new Plan
+            try
             {
-                Id = (int)planDTO.Id,
-                Name = planDTO.Name,
-                FreeMinutes = (int)planDTO.FreeMinutes
-            };
+                Plan plan = new Plan { };
+
+                if (planDTO.Id != null)
+                {
+                    plan.Id = (int)planDTO.Id;
+                }
+                plan.Name = planDTO.Name;
+                plan.FreeMinutes = (int)planDTO.FreeMinutes;
+
+                return plan;
+            }
+            catch
+            {
+                throw new Exception("Erro ao converter dados");
+            }
         }
     }
 }

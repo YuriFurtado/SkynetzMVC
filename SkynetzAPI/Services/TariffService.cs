@@ -23,7 +23,7 @@ namespace SkynetzAPI.Services
 
             List<TariffDTO> tariffsDTOS = new List<TariffDTO>();
 
-            foreach(Tariff tariff in tariffs)
+            foreach (Tariff tariff in tariffs)
             {
                 var tariffDTO = ModelToDTO(tariff);
 
@@ -56,7 +56,7 @@ namespace SkynetzAPI.Services
 
             List<TariffDTO> tariffsDTOS = new List<TariffDTO>();
 
-            foreach(Tariff tariff in tariffs)
+            foreach (Tariff tariff in tariffs)
             {
                 var tariffDTO = ModelToDTO(tariff);
 
@@ -84,26 +84,50 @@ namespace SkynetzAPI.Services
             return returnTariff != null;
         }
 
+        public bool DeleteTariff(int id)
+        {
+            return tariffRepository.DeleteTariff(id);
+        }
+
         public TariffDTO ModelToDTO(Tariff tariff)
         {
-            return new TariffDTO
+            try
             {
-                Id = tariff.Id,
-                Source = tariff.Source,
-                Destination = tariff.Destination,
-                MinuteValue = tariff.MinuteValue
-            };
+                TariffDTO tariffDTO = new TariffDTO { };
+
+                tariffDTO.Id = tariff.Id;
+                tariffDTO.Source = tariff.Source;
+                tariffDTO.Destination = tariff.Destination;
+                tariffDTO.MinuteValue = tariff.MinuteValue;
+
+                return tariffDTO;
+            }
+            catch
+            {
+                throw new Exception("Erro ao converter dados");
+            }
         }
 
         public Tariff DTOToModel(TariffDTO tariffDTO)
         {
-            return new Tariff
+            try
             {
-                Id = (int)tariffDTO.Id,
-                Source = tariffDTO.Source,
-                Destination = tariffDTO.Destination,
-                MinuteValue = (double)tariffDTO.MinuteValue
-            };
+                Tariff tariff = new Tariff { };
+
+                if (tariffDTO.Id != null)
+                {
+                    tariff.Id = (int)tariffDTO.Id;
+                }
+                tariff.Source = tariffDTO.Source;
+                tariff.Destination = tariffDTO.Destination;
+                tariff.MinuteValue = (double)tariffDTO.MinuteValue;
+
+                return tariff;
+            }
+            catch
+            {
+                throw new Exception("Erro ao converter dados");
+            }
         }
     }
 }

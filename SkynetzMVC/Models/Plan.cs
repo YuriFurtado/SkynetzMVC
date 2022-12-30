@@ -7,8 +7,8 @@ namespace SkynetzMVC.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int FreeMinutes { get; set; }
+        public string? Name { get; set; }
+        public int? FreeMinutes { get; set; }
 
         public Plan()
         {
@@ -48,7 +48,7 @@ namespace SkynetzMVC.Models
                 throw new ArgumentException("Valores Negativos não são válidos para a operação");
             }
 
-            return usedMinutes - FreeMinutes;
+            return (int)(usedMinutes - FreeMinutes);
         }
 
         public double PriceWithPlan (int usedMinutes, double valueMinute)
