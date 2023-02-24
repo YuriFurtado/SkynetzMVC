@@ -69,7 +69,7 @@ namespace SkynetzMVC.Test
         #region Teste PlanRepository
 
         [Fact]
-        public void Should_Return_Success_GetAllPlans3()
+        public void Should_Return_Success_GetAllPlans()
         {
             var options = new DbContextOptionsBuilder<SkynetzDbContext>()
                 .UseInMemoryDatabase(databaseName: "GetAllPlanDatabase")
@@ -240,6 +240,162 @@ namespace SkynetzMVC.Test
                 List<Tariff> tariffs = tariffRepository.GetAll();
 
                 Assert.Equal(6, tariffs.Count);
+            }
+        }
+
+        [Fact]
+        public void Should_Return_Success_GetTariffById()
+        {
+            var options = new DbContextOptionsBuilder<SkynetzDbContext>()
+                .UseInMemoryDatabase(databaseName: "GetTariffByIdDatabase")
+                .Options;
+
+            // Insert seed data into the database using one instance of the context
+            using (var context = new SkynetzDbContext(options))
+            {
+                context.Tariffs.Add(new Tariff { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.9 });
+                context.Tariffs.Add(new Tariff { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.9 });
+                context.Tariffs.Add(new Tariff { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.7 });
+                context.Tariffs.Add(new Tariff { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.7 });
+                context.Tariffs.Add(new Tariff { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.9 });
+                context.Tariffs.Add(new Tariff { Id = 6, Source = "018", Destination = "011", MinuteValue = 1.9 });
+                context.SaveChanges();
+            }
+
+            // Use a clean instance of the context to run the test
+            using (var context = new SkynetzDbContext(options))
+            {
+                TariffRepository tariffRepository = new TariffRepository(context);
+                Tariff tariff = tariffRepository.GetTariffById(4);
+
+                Assert.Equal(4, tariff.Id);
+                Assert.Equal("017", tariff.Source);
+                Assert.Equal("011", tariff.Destination);
+                Assert.Equal(2.7, tariff.MinuteValue);
+            }
+        }
+
+        [Fact]
+        public void Should_Return_Success_GetTariffByParameter()
+        {
+            var options = new DbContextOptionsBuilder<SkynetzDbContext>()
+                .UseInMemoryDatabase(databaseName: "GetTariffByParameterDatabase")
+                .Options;
+
+            // Insert seed data into the database using one instance of the context
+            using (var context = new SkynetzDbContext(options))
+            {
+                context.Tariffs.Add(new Tariff { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.9 });
+                context.Tariffs.Add(new Tariff { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.9 });
+                context.Tariffs.Add(new Tariff { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.7 });
+                context.Tariffs.Add(new Tariff { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.7 });
+                context.Tariffs.Add(new Tariff { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.9 });
+                context.Tariffs.Add(new Tariff { Id = 6, Source = "018", Destination = "011", MinuteValue = 1.9 });
+                context.SaveChanges();
+            }
+
+            // Use a clean instance of the context to run the test
+            using (var context = new SkynetzDbContext(options))
+            {
+                TariffRepository tariffRepository = new TariffRepository(context);
+                FilterTariff filterTariff = new FilterTariff { Destination = "011" };
+                List<Tariff> tariffs = tariffRepository.GetByParameters(filterTariff);
+
+                Assert.Equal(3, tariffs.Count);
+            }
+        }
+
+        [Fact]
+        public void Should_Return_Success_InsertTariff()
+        {
+            var options = new DbContextOptionsBuilder<SkynetzDbContext>()
+                .UseInMemoryDatabase(databaseName: "InsertTariffDatabase")
+                .Options;
+
+            // Insert seed data into the database using one instance of the context
+            using (var context = new SkynetzDbContext(options))
+            {
+                context.Tariffs.Add(new Tariff { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.9 });
+                context.Tariffs.Add(new Tariff { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.9 });
+                context.Tariffs.Add(new Tariff { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.7 });
+                context.Tariffs.Add(new Tariff { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.7 });
+                context.Tariffs.Add(new Tariff { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.9 });
+                context.Tariffs.Add(new Tariff { Id = 6, Source = "018", Destination = "011", MinuteValue = 1.9 });
+                context.SaveChanges();
+            }
+
+            // Use a clean instance of the context to run the test
+            using (var context = new SkynetzDbContext(options))
+            {
+                TariffRepository tariffRepository = new TariffRepository(context);
+                Tariff insertTariff = new Tariff { Source = "019", Destination = "011", MinuteValue = 1.5 };
+                Tariff tariff = tariffRepository.InsertTariff(insertTariff);
+
+                Assert.Equal("019", tariff.Source);
+                Assert.Equal("011", tariff.Destination);
+                Assert.Equal(1.5, tariff.MinuteValue);
+            }
+        }
+
+        [Fact]
+        public void Should_Return_Success_UpdateTariff()
+        {
+            var options = new DbContextOptionsBuilder<SkynetzDbContext>()
+                .UseInMemoryDatabase(databaseName: "UpdateTariffDatabase")
+                .Options;
+
+            // Insert seed data into the database using one instance of the context
+            using (var context = new SkynetzDbContext(options))
+            {
+                context.Tariffs.Add(new Tariff { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.9 });
+                context.Tariffs.Add(new Tariff { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.9 });
+                context.Tariffs.Add(new Tariff { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.7 });
+                context.Tariffs.Add(new Tariff { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.7 });
+                context.Tariffs.Add(new Tariff { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.9 });
+                context.Tariffs.Add(new Tariff { Id = 6, Source = "018", Destination = "011", MinuteValue = 1.9 });
+                context.SaveChanges();
+            }
+
+            // Use a clean instance of the context to run the test
+            using (var context = new SkynetzDbContext(options))
+            {
+                TariffRepository tariffRepository = new TariffRepository(context);
+                Tariff insertTariff = new Tariff {Id = 5, Source = "019", Destination = "011", MinuteValue = 1.5 };
+                Tariff tariff = tariffRepository.UpdateTariff(insertTariff);
+
+                Assert.Equal(5, tariff.Id);
+                Assert.Equal("019", tariff.Source);
+                Assert.Equal("011", tariff.Destination);
+                Assert.Equal(1.5, tariff.MinuteValue);
+            }
+        }
+
+        [Fact]
+        public void Should_Return_Success_DeleteTariff()
+        {
+            var options = new DbContextOptionsBuilder<SkynetzDbContext>()
+                .UseInMemoryDatabase(databaseName: "DeleteTariffDatabase")
+                .Options;
+
+            // Insert seed data into the database using one instance of the context
+            using (var context = new SkynetzDbContext(options))
+            {
+                context.Tariffs.Add(new Tariff { Id = 1, Source = "011", Destination = "016", MinuteValue = 1.9 });
+                context.Tariffs.Add(new Tariff { Id = 2, Source = "016", Destination = "011", MinuteValue = 2.9 });
+                context.Tariffs.Add(new Tariff { Id = 3, Source = "011", Destination = "017", MinuteValue = 1.7 });
+                context.Tariffs.Add(new Tariff { Id = 4, Source = "017", Destination = "011", MinuteValue = 2.7 });
+                context.Tariffs.Add(new Tariff { Id = 5, Source = "011", Destination = "018", MinuteValue = 0.9 });
+                context.Tariffs.Add(new Tariff { Id = 6, Source = "018", Destination = "011", MinuteValue = 1.9 });
+                context.SaveChanges();
+            }
+
+            // Use a clean instance of the context to run the test
+            using (var context = new SkynetzDbContext(options))
+            {
+                TariffRepository tariffRepository = new TariffRepository(context);
+                tariffRepository.DeleteTariff(3);
+
+                Assert.Equal(5, tariffRepository.GetAll().Count);
             }
         }
 
