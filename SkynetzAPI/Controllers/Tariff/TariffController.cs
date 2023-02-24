@@ -7,6 +7,7 @@ using SkynetzMVC.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SkynetzAPI.Controllers.Tariff
@@ -30,98 +31,169 @@ namespace SkynetzAPI.Controllers.Tariff
             try
             {
                 var tariffs = tariffService.GetAllTariffs();
-                return Ok(tariffs);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+                    Content = tariffs
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpGet]
         [Route("Tariff/{id}")]
-        public ActionResult GetTariffById([FromHeader] int id)
+        public ActionResult GetTariffById(int id)
         {
             try
             {
                 var tariff = tariffService.GetTariffById(id);
-                return Ok(tariff);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+                    Content = tariff
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpGet]
         [Route("Tariff/Filter")]
-        public ActionResult GetTariffsByParameter([FromBody] TariffDTO tariffDTO)
+        public ActionResult GetTariffsByParameter(string? source, string? destination, float? minuteValue)
         {
             try
             {
+                TariffDTO tariffDTO = new TariffDTO { Source = source, Destination = destination, MinuteValue = minuteValue };
                 var tariffs = tariffService.GetTariffsByParameter(tariffDTO);
-
+                ReturnDTO successDTO = new ReturnDTO { };
                 if (tariffs.Any())
                 {
-                    return Ok(tariffs);
+                    successDTO.StatusCode = HttpStatusCode.OK;
+                    successDTO.Success = true;
+                    successDTO.Content = tariffs;
+                    return Ok(successDTO);
                 }
                 else
                 {
-                    return NotFound();
+                    successDTO.StatusCode = HttpStatusCode.NotFound;
+                    successDTO.Success = false;
+                    return NotFound(successDTO);
 
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpPost]
         [Route("Tariff")]
-        public ActionResult InsertTariff([FromBody] TariffDTO tariffDTO)
+        public ActionResult InsertTariff(string source, string destination, float minuteValue)
         {
             try
             {
+                TariffDTO tariffDTO = new TariffDTO { Source = source, Destination = destination, MinuteValue = minuteValue };
                 var tariff = tariffService.InsertTariff(tariffDTO);
-
-                return Ok(tariff);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.Created,
+                    Success = true,
+                    Message = "Tarifa inserida com sucesso",
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpPut]
         [Route("Tariff")]
-        public ActionResult UpdateTariff([FromBody] TariffDTO tariffDTO)
+        public ActionResult UpdateTariff(int id, string source, string destination, float minuteValue)
         {
             try
             {
+                TariffDTO tariffDTO = new TariffDTO { Id = id, Source = source, Destination = destination, MinuteValue = minuteValue };
                 var tariff = tariffService.UpdateTariff(tariffDTO);
-
-                return Ok(tariff);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.Created,
+                    Success = true,
+                    Message = "Tarifa alterada com sucesso",
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpDelete]
         [Route("Tariff/{id}")]
-        public ActionResult DeleteTariff([FromHeader] int id)
+        public ActionResult DeleteTariff(int id)
         {
             try
             {
                 var returnDelete = tariffService.DeleteTariff(id);
-
-                return Ok(returnDelete);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.Created,
+                    Success = true,
+                    Message = "Tarifa removida com sucesso",
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 

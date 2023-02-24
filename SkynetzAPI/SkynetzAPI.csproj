@@ -4,13 +4,22 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\SkynetzMVC\SkynetzMVC.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Home\Request\" />
     <Folder Include="Controllers\Plan\Request\" />
     <Folder Include="Controllers\Tariff\Request\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
 

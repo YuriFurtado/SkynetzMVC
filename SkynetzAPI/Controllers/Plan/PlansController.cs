@@ -23,8 +23,6 @@ namespace SkynetzAPI.Controllers.Plan
             planService = new PlanService(db);
         }
 
-        // TODO - Realocar DTO para pasta Response
-
         [HttpGet]
         [Route("Plan")]
         public ActionResult GetAllPlan()
@@ -32,24 +30,42 @@ namespace SkynetzAPI.Controllers.Plan
             try
             {
                 var plans = planService.GetAllPlans();
-                return Ok(plans);
+                ReturnDTO successDTO = new ReturnDTO 
+                { 
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+                    Content = plans
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpGet]
         [Route("Plan/{id}")]
-        public ActionResult GetPlanById([FromHeader] int id)
+        public ActionResult GetPlanById(int id)
         {
             try
             {
                 var plan = planService.GetPlanById(id);
                 if (plan != null)
                 {
-                    return Ok(plan);
+                    ReturnDTO successDTO = new ReturnDTO
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Success = true,
+                        Content = plan
+                    };
+                    return Ok(successDTO);
                 }
                 else
                 {
@@ -58,79 +74,132 @@ namespace SkynetzAPI.Controllers.Plan
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpGet]
         [Route("Plan/Filter")]
-        public ActionResult GetPlansByParameter([FromBody] PlanDTO filterPlan)
+        public ActionResult GetPlansByParameter(string? name, int? freeMinutes)
         {
             try
             {
+                PlanDTO filterPlan = new PlanDTO {Name = name, FreeMinutes = freeMinutes };
                 var plans = planService.GetPlanByParameter(filterPlan);
-
+                ReturnDTO successDTO = new ReturnDTO { };
                 if (plans.Any())
                 {
-                    return Ok(plans);
+                    successDTO.StatusCode = HttpStatusCode.OK;
+                    successDTO.Success = true;
+                    successDTO.Content = plans;
+                    return Ok(successDTO);
                 }
                 else
                 {
-                    return NotFound();
+                    successDTO.StatusCode = HttpStatusCode.NotFound;
+                    successDTO.Success = false;
+                    return NotFound(successDTO);
 
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpPost]
         [Route("Plan")]
-        public ActionResult InsertPlan([FromBody] PlanDTO planDTO)
+        public ActionResult InsertPlan(string name, int freeMinutes)
         {
             try
             {
+                PlanDTO planDTO = new PlanDTO { Name = name, FreeMinutes = freeMinutes };
                 var plan = planService.InsertPlan(planDTO);
-
-                return Ok(plan);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.Created,
+                    Success = true,
+                    Message = "Plano inserido com sucesso",
+                };
+                return Ok(successDTO);
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpPut]
         [Route("Plan")]
-        public ActionResult UpdatePlan([FromBody] PlanDTO planDTO)
+        public ActionResult UpdatePlan(int id, string name, int freeMinutes)
         {
             try
             {
+                PlanDTO planDTO = new PlanDTO { Id = id, Name = name, FreeMinutes = freeMinutes };
                 var plan = planService.UpdatePlan(planDTO);
-
-                return Ok(plan);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+                    Message = "Plano alterado com sucesso",
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 
         [HttpDelete]
         [Route("Plan/{id}")]
-        public ActionResult DeletePlan([FromHeader] int id)
+        public ActionResult DeletePlan(int id)
         {
             try
             {
                 var returnDelete = planService.DeletePlan(id);
-
-                return Ok(returnDelete);
+                ReturnDTO successDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+                    Message = "Plano removido com sucesso",
+                };
+                return Ok(successDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error - {(ex.InnerException ?? ex).Message}");
+                ReturnDTO erroDTO = new ReturnDTO
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false,
+                    Message = $"Internal server error - {(ex.InnerException ?? ex).Message}"
+                };
+                return StatusCode(500, erroDTO);
             }
         }
 

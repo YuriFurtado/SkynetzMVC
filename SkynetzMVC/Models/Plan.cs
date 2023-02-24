@@ -69,5 +69,10 @@ namespace SkynetzMVC.Models
             }
         }
 
+        public double PriceWithouPlan(Tariff tariff, int usedMinutes)
+        {
+            return tariff.MinuteValue * usedMinutes;
+        }
+
     }
 }
